@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <span th:replace="fragments/master_fragments :: head('e-BusTicket')"></span>
+    <span th:replace="fragments/master_fragments :: common-css"></span>
+    <link th:href="@{/common/css/login.css}" rel="stylesheet" />
+  </head>
+
+  <body class="nav-sm">
+    <div th:replace="fragments/master_fragments :: top-navbar"></div>
+    <div class="container-fluid text-center">
+      <div class="row content">
+        <div class="col-xs-0 col-md-2"></div>
+        <div class="col-xs-12 col-md-8">
+          <div class="jumbotron" style="height: 250px;">
+            <p>
+              Welcome ! Please Enter your Mobile Number below to continue
+            </p>
+            <div class="col-xs-0 col-md-3"></div>
+            <div class="col-xs-12 col-md-6">
+              <div
+                class="alert alert-danger"
+                th:if="${msg != null && msg != ''}"
+                th:text="${msg}"
+              ></div>
+              <div
+                class="alert alert-success"
+                th:if="${successmsg != null && successmsg != ''}"
+                th:text="${successmsg}"
+              ></div>
+              <label class="error-div" id="mobile-error"
+                >Enter a valid Mobile No</label
+              >
+              <form
+                th:action="@{/fireOtp}"
+                method="POST"
+                onsubmit="return doValidateMobile();"
+              >
+                <div class="input-group">
+                  <span class="input-group-addon">+91-</span>
+                  <input
+                    type="text"
+                    name="mobile"
+                    id="mobile"
+                    placeholder="Mobile No"
+                    class="form-control"
+                  />
+                  <span class="input-group-btn">
+                    <button class="btn btn-success" type="submit">Go!</button>
+                  </span>
+                </div>
+              </form>
+            </div>
+            <div class="col-xs-0 col-md-3"></div>
+          </div>
+        </div>
+        <div class="col-xs-0 col-md-2"></div>
+      </div>
+    </div>
+    <footer th:replace="fragments/master_fragments :: footer"></footer>
+    <script th:replace="fragments/master_fragments :: common-js"></script>
+    <div id="myModal" class="modal fade">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Official Login</h4>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-hidden="true"
+            >
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <form th:action="@{/login}" method="post">
+              <div class="form-group">
+                <i class="fa fa-user"></i>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Username"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <i class="fa fa-lock"></i>
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  required="required"
+                />
+              </div>
+              <div class="form-group">
+                <input
+                  type="submit"
+                  class="btn btn-primary btn-block btn-lg"
+                  value="Login"
+                />
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <a href="#">Forgot Password?</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript">
+      function doValidateMobile() {
+        $(".error-div").hide();
+        $(".form-control").removeClass("error-border");
+        if ($("#mobile").val() === "" || isNaN($("#mobile").val())) {
+          $("#mobile-error").show();
+          $("#mobile").addClass("error-border");
+          return false;
+        } else if ($("#mobile").val().length != 10) {
+          $("#mobile-error").show();
+          $("#mobile").addClass("error-border");
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>
