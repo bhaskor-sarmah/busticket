@@ -2,8 +2,10 @@ package com.bohniman.covid.busticket.security;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
@@ -49,18 +51,21 @@ public class UrlAuthenticationSuccessHandler implements AuthenticationSuccessHan
 
     protected String determineTargetUrl(final Authentication authentication) {
         final Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        if (authorities.size() > 1) {
-            return "/page-home";
-        } else if (authorities.size() == 1) {
-            // for (final GrantedAuthority grantedAuthority : authorities) {
-            // return grantedAuthority.getAuthority().toLowerCase() + "/page-"
-            // + grantedAuthority.getAuthority().toLowerCase() + "-dashboard";
-            // }
-            return "/page-home";
-        } else {
-            return "/no-role";
+        for (final GrantedAuthority grantedAuthority : authorities) {
+            if (grantedAuthority.getAuthority().equals("ADMIN")) {
+                return "/admin/page-home";
+            }
         }
-        // return null;
+
+        // if (authorities.size() > 1) {
+        // return "/page-home";
+        // } else if (authorities.size() == 1) {
+
+        // return "/page-home";
+        // } else {
+        // return "/no-role";
+        // }
+        return "/no-role";
     }
 
     /**

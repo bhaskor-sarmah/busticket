@@ -51,7 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String[] unloggedUrls = { "/", "/login", "/fireOtp", "/validateOtp", "/saveApplicant" };
+        String[] unloggedUrls = { "/", "/login", "/fireOtp", "/validateOtp", "/saveApplicant", "/no-role" };
 
         http.authorizeRequests().antMatchers(unloggedUrls).permitAll().antMatchers("/admin/**").hasAuthority("ADMIN")
                 .anyRequest().authenticated().and().csrf().disable().formLogin().loginPage("/login")
@@ -63,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/main/**", "/common/**", "/plugins/**", "/photo/**", "/images/**");
+        web.ignoring().antMatchers("/common/**", "/plugins/**", "/images/**");
     }
 
     @Bean

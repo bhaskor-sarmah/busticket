@@ -15,6 +15,7 @@ public class BusticketApplication {
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+		System.out.println(bCryptPasswordEncoder.encode("bhaskor"));
 		return bCryptPasswordEncoder;
 	}
 }

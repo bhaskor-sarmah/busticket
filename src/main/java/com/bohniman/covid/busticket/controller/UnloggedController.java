@@ -1,5 +1,8 @@
 package com.bohniman.covid.busticket.controller;
 
+import java.util.Map;
+
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -42,9 +45,15 @@ public class UnloggedController {
 	@Autowired
 	CommonService commonService;
 
-	@GetMapping(value = { "/" })
-	public ModelAndView index(ModelAndView mv) {
+	@GetMapping(value = { "/", "/login" })
+	public ModelAndView index(ServletRequest request, ModelAndView mv) {
 		mv = new ModelAndView("unlogged/index");
+
+		Map<String, String[]> paramMap = request.getParameterMap();
+
+		if (paramMap.containsKey("error")) {
+			mv.addObject("loginError", "Invalid Username or Password");
+		}
 		return mv;
 	}
 
@@ -55,14 +64,18 @@ public class UnloggedController {
 			mv = new ModelAndView("unlogged/index");
 			mv.addObject("msg", "Invalid Mobile Number ! Please try again.");
 			return mv;
+		} else if (applicantService.checkIfMobileExist(mobile)) {
+			mv = new ModelAndView("unlogged/index");
+			mv.addObject("msg", "Mobile Number already registered. Please use another number.");
+			return mv;
 		}
 
 		String otp = RandomString.randomNumber(4);
 		System.out.println(otp);
 		session.setAttribute("otp", otp);
+		session.setAttribute("mobile", mobile);
 		if (FireSms.doFireSMS(mobile, otp)) {
 			mv = new ModelAndView("unlogged/otp");
-			mv.addObject("mobile", mobile);
 			return mv;
 		} else {
 			mv = new ModelAndView("unlogged/index");
@@ -72,15 +85,11 @@ public class UnloggedController {
 	}
 
 	@PostMapping(value = { "/validateOtp" })
-	public ModelAndView validateOtp(ModelAndView mv, HttpSession session, @RequestParam("otp") String otp) {
+	public ModelAndView validateOtp(ModelAndView mv, HttpSession session, @RequestParam("otp") String otp,
+			@RequestParam("mobile") String mobile) {
 
-		// if (otp.length() != 4 || !Validation.isNumeric(otp)) {
-		// mv = new ModelAndView("unlogged/otp");
-		// mv.addObject("msg", "Invalid OTP ! Please try again.");
-		// return mv;
-		// }
-
-		if (session.getAttribute("otp").toString().equals(otp)) {
+		if (session.getAttribute("otp") != null && session.getAttribute("otp").toString().equals(otp)
+				&& session.getAttribute("mobile") != null && session.getAttribute("mobile").toString().equals(mobile)) {
 			mv = new ModelAndView("unlogged/form");
 			mv.addObject("districtList", commonService.getAllDistrict());
 			mv.addObject("purposeList", commonService.getAllPurpose());
@@ -94,37 +103,43 @@ public class UnloggedController {
 	}
 
 	@PostMapping(value = { "/saveApplicant" })
-	public ModelAndView saveApplicant(ModelAndView mv, @Valid @ModelAttribute("applicant") Applicant applicant,
-			BindingResult result) {
+	public ModelAndView saveApplicant(HttpSession session, ModelAndView mv,
+			@Valid @ModelAttribute("applicant") Applicant applicant, BindingResult result) {
 
-		// if (otp.length() != 4 || !Validation.isNumeric(otp)) {
-		// mv = new ModelAndView("unlogged/otp");
-		// mv.addObject("msg", "Invalid OTP ! Please try again.");
-		// return mv;
-		// }
 		if (result.hasErrors()) {
 			mv = new ModelAndView("unlogged/form");
 			mv.addObject("districtList", commonService.getAllDistrict());
 			mv.addObject("purposeList", commonService.getAllPurpose());
 			mv.addObject("applicant", applicant);
 			return mv;
-		} else if (applicantService.saveApplicant(applicant)) {
-			mv = new ModelAndView("unlogged/index");
-			mv.addObject("successmsg", "Application Submitted successfully !");
-			return mv;
 		} else {
-			mv = new ModelAndView("unlogged/form");
-			mv.addObject("districtList", commonService.getAllDistrict());
-			mv.addObject("purposeList", commonService.getAllPurpose());
-			mv.addObject("applicant", applicant);
-			mv.addObject("msg", "Failed saving Application ! Please try again.");
-			return mv;
+			applicant.setMobile(session.getAttribute("mobile").toString());
+			applicant.setType("PUBLIC");
+			if (applicantService.saveApplicant(applicant)) {
+				mv = new ModelAndView("unlogged/index");
+				mv.addObject("successmsg", "Application Submitted successfully !");
+				return mv;
+			} else {
+				mv = new ModelAndView("unlogged/form");
+				mv.addObject("districtList", commonService.getAllDistrict());
+				mv.addObject("purposeList", commonService.getAllPurpose());
+				mv.addObject("applicant", applicant);
+				mv.addObject("msg", "Failed saving Application ! Please try again.");
+				return mv;
+			}
 		}
 	}
 
 	@GetMapping(value = { "/access-denied" })
 	public ModelAndView accessDenied(ModelAndView mv) {
 		mv = new ModelAndView("error/403");
+		return mv;
+	}
+
+	@GetMapping(value = { "/no-role" })
+	public ModelAndView noRole(ModelAndView mv) {
+		mv = new ModelAndView("unlogged/index");
+		mv.addObject("loginError", "Unauthorised ! Please try again.");
 		return mv;
 	}
 

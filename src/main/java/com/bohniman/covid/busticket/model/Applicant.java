@@ -1,6 +1,7 @@
 package com.bohniman.covid.busticket.model;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Applicant {
+public class Applicant extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -37,6 +38,17 @@ public class Applicant {
     @Pattern(regexp = "[\\d]+", message = "Select a purpose")
     private String purpose;
 
+    @Pattern(regexp = "[\\d]{10}", message = "Invalid Mobile No")
+    @Column(unique = true, length = 10)
+    private String mobile;
+
+    private String type;
+
     private String purposeDetails;
+
+    public Applicant(String mobile, String type) {
+        this.mobile = mobile;
+        this.type = type;
+    }
 
 }

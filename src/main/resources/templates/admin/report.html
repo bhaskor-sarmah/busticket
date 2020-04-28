@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <span th:replace="fragments/master_fragments :: head('e-BusTicket')"></span>
+    <span th:replace="fragments/master_fragments :: common-css"></span>
+    <link th:href="@{/common/css/login.css}" rel="stylesheet" />
+  </head>
+
+  <body class="nav-sm">
+    <div th:replace="fragments/master_fragments :: top-navbar-admin"></div>
+    <div class="container-fluid" style="margin-bottom: 30px;">
+      <div class="row content">
+        <div class="col-xs-0 col-md-1"></div>
+        <div class="col-xs-12 col-md-10" style="margin-top: 15px;">
+          <div
+            class="alert alert-danger text-center"
+            style="font-weight: bold;"
+            th:if="${msg != null && msg != ''}"
+            th:text="${msg}"
+          ></div>
+          <div
+            class="alert alert-success text-center"
+            style="font-weight: bold;"
+            th:if="${successmsg != null && successmsg != ''}"
+            th:text="${successmsg}"
+          ></div>
+          <table class="table table-striped" id="myTable">
+            <thead>
+              <th>Name</th>
+              <th>Mobile</th>
+              <th>No Of Members</th>
+              <th>From District</th>
+              <th>To District</th>
+              <th>Purpose</th>
+              <th>Description</th>
+              <th>SOURCE</th>
+              <th>Action</th>
+            </thead>
+            <tbody>
+              <tr th:each="applicant: ${applicantList}">
+                <td th:text="${applicant.name}" />
+                <td th:text="${applicant.mobile}" />
+                <td th:text="${applicant.noOFMember}" />
+                <td th:text="${applicant.formDistrict}" />
+                <td th:text="${applicant.toDistrict}" />
+                <td th:text="${applicant.purpose}" />
+                <td th:text="${applicant.purposeDetails}" />
+                <td th:text="${applicant.type}" />
+                <td>
+                  <form th:action="@{/admin/updateDetails}" method="POST">
+                    <input
+                      type="hidden"
+                      name="applicantId"
+                      th:value="${applicant.id}"
+                    />
+                    <input
+                      type="submit"
+                      name="submit"
+                      value="Edit"
+                      class="btn btn-primary"
+                    />
+                  </form>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-xs-0 col-md-1"></div>
+      </div>
+    </div>
+    <footer th:replace="fragments/master_fragments :: footer"></footer>
+    <script th:replace="fragments/master_fragments :: common-js"></script>
+    <script type="text/javascript">
+      function doValidateMobile() {
+        $(".error-div").hide();
+        $(".form-control").removeClass("error-border");
+        if ($("#otp").val() === "" || isNaN($("#otp").val())) {
+          $("#otp-error").show();
+          $("#otp").addClass("error-border");
+          return false;
+        } else if ($("#otp").val().length != 4) {
+          $("#otp-error").show();
+          $("#otp").addClass("error-border");
+          return false;
+        }
+        return true;
+      }
+    </script>
+    <script>
+      $(window).on("load", function () {
+        $("#myTable").dataTable();
+      });
+    </script>
+  </body>
+</html>
