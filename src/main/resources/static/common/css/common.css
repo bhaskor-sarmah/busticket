@@ -57,3 +57,9 @@ footer {
     color: red;
     text-align: left;
 }
+
+.divider {
+    border-bottom: 1px solid #DDDDDD;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}

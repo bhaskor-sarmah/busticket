@@ -1,36 +1,36 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">  
-  <head>
-    <span th:replace="fragments/master_fragments :: head('e-FT | Dashboard')"></span>
-    <span th:replace="fragments/master_fragments :: common-css"></span>
-  </head>
-  <body class="nav-sm">
-    <div class="container body">
-      <div class="main_container">
-        <div th:replace="fragments/master_fragments :: top-navbar"></div>
-        <div class="info-bar">
-          <div class="row">
-            <div class="col-md-10">
-              <strong >
-                FROBIDDEN</strong>
-            </div>
-            <div class="col-md-1">
-              <a href="#" id="decrease">A-</a>
-              <a href="#" id="increase">A+</a>
-            </div>
-          </div>
-        </div>
-        <div class="right_col" role="main">
-          <div class="row">
-            <h1 class="text-center text-danger"><i class="fas fa-exclamation-triangle"></i><br> ACCESS DENIED<h1>
-                <h4 class="text-center">You are not authorised to visit this page.<br> Please contact your system administrator.
-                </h4>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+  <span th:replace="fragments/master_fragments :: head('e-BusTicket')"></span>
+  <span th:replace="fragments/master_fragments :: common-css"></span>
+</head>
+
+<body class="nav-sm">
+  <div class="container body">
+    <div class="main_container">
+      <div th:replace="fragments/master_fragments :: top-navbar"></div>
+      <div class="info-bar">
+        <div class="row">
+          <div class="col-md-10">
+            <strong>
+              FROBIDDEN</strong>
           </div>
         </div>
       </div>
-      <footer th:replace="fragments/master_fragments :: footer"></footer>
+      <div class="right_col" role="main">
+        <div class="row">
+          <h1 class="text-center text-danger"><i class="fas fa-exclamation-triangle"></i><br> ACCESS DENIED<h1>
+              <h4 class="text-center">You are not authorised to visit this page.<br> Please contact your system
+                administrator.
+              </h4>
+        </div>
+      </div>
     </div>
-    <span th:replace="fragments/master_fragments :: common-js"></span>
-    <script th:replace="fragments/master_fragments :: custom-js"></script>
-  </body>
+    <footer th:replace="fragments/master_fragments :: footer"></footer>
+  </div>
+  <span th:replace="fragments/master_fragments :: common-js"></span>
+  <script th:replace="fragments/master_fragments :: custom-js"></script>
+</body>
+
 </html>

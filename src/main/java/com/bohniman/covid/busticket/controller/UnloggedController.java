@@ -1,5 +1,6 @@
 package com.bohniman.covid.busticket.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -7,6 +8,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import com.bohniman.covid.busticket.model.Applicant;
+import com.bohniman.covid.busticket.model.MasterDistrict;
+import com.bohniman.covid.busticket.model.MasterSubDistrict;
 import com.bohniman.covid.busticket.services.ApplicantService;
 import com.bohniman.covid.busticket.services.CommonService;
 import com.bohniman.covid.busticket.utils.FireSms;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -88,18 +92,20 @@ public class UnloggedController {
 	public ModelAndView validateOtp(ModelAndView mv, HttpSession session, @RequestParam("otp") String otp,
 			@RequestParam("mobile") String mobile) {
 
-		if (session.getAttribute("otp") != null && session.getAttribute("otp").toString().equals(otp)
-				&& session.getAttribute("mobile") != null && session.getAttribute("mobile").toString().equals(mobile)) {
-			mv = new ModelAndView("unlogged/form");
-			mv.addObject("districtList", commonService.getAllDistrict());
-			mv.addObject("purposeList", commonService.getAllPurpose());
-			mv.addObject("applicant", new Applicant());
-			return mv;
-		} else {
-			mv = new ModelAndView("unlogged/otp");
-			mv.addObject("msg", "Invalid OTP ! Please try again.");
-			return mv;
-		}
+		// if (session.getAttribute("otp") != null &&
+		// session.getAttribute("otp").toString().equals(otp)
+		// && session.getAttribute("mobile") != null &&
+		// session.getAttribute("mobile").toString().equals(mobile)) {
+		mv = new ModelAndView("unlogged/form");
+		mv.addObject("stateList", commonService.getAllState());
+		mv.addObject("purposeList", commonService.getAllPurpose());
+		mv.addObject("applicant", new Applicant());
+		return mv;
+		// } else {
+		// mv = new ModelAndView("unlogged/otp");
+		// mv.addObject("msg", "Invalid OTP ! Please try again.");
+		// return mv;
+		// }
 	}
 
 	@PostMapping(value = { "/saveApplicant" })
@@ -108,7 +114,7 @@ public class UnloggedController {
 
 		if (result.hasErrors()) {
 			mv = new ModelAndView("unlogged/form");
-			mv.addObject("districtList", commonService.getAllDistrict());
+			mv.addObject("stateList", commonService.getAllState());
 			mv.addObject("purposeList", commonService.getAllPurpose());
 			mv.addObject("applicant", applicant);
 			return mv;
@@ -121,13 +127,25 @@ public class UnloggedController {
 				return mv;
 			} else {
 				mv = new ModelAndView("unlogged/form");
-				mv.addObject("districtList", commonService.getAllDistrict());
+				mv.addObject("stateList", commonService.getAllState());
 				mv.addObject("purposeList", commonService.getAllPurpose());
 				mv.addObject("applicant", applicant);
 				mv.addObject("msg", "Failed saving Application ! Please try again.");
 				return mv;
 			}
 		}
+	}
+
+	@PostMapping(value = { "/GetDistrict" })
+	@ResponseBody
+	public List<MasterDistrict> getDistrict(@RequestParam("id") String stateCode) {
+		return commonService.getDistrictByState(stateCode);
+	}
+
+	@PostMapping(value = { "/GetSubDistrict" })
+	@ResponseBody
+	public List<MasterSubDistrict> getSubDistrict(@RequestParam("id") String districtCode) {
+		return commonService.getSubDistrictByDistrict(districtCode);
 	}
 
 	@GetMapping(value = { "/access-denied" })

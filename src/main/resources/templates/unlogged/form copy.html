@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+  <head>
+    <span th:replace="fragments/master_fragments :: head('e-BusTicket')"></span>
+    <span th:replace="fragments/master_fragments :: common-css"></span>
+    <link th:href="@{/common/css/login.css}" rel="stylesheet" />
+  </head>
+
+  <body class="nav-sm">
+    <div th:replace="fragments/master_fragments :: top-navbar"></div>
+    <div class="container-fluid" style="margin-bottom: 30px;">
+      <div class="row content">
+        <div class="col-xs-0 col-md-2"></div>
+        <div class="col-xs-12 col-md-8">
+          <div
+            class="alert alert-danger"
+            th:if="${msg != null && msg != ''}"
+            th:text="${msg}"
+          ></div>
+          <div class="panel panel-default" style="margin-top: 25px;">
+            <div class="panel-heading">
+              <label>
+                Welcome ! Please fill the form below for Ticket Booking
+              </label>
+            </div>
+            <div class="panel-body">
+              <form
+                th:action="@{/saveApplicant}"
+                method="POST"
+                th:object="${applicant}"
+              >
+                <div class="row">
+                  <div class="col-xs-0 col-md-1"></div>
+                  <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                      <label for="name">
+                        Full Name
+                      </label>
+                      <input
+                        th:field="*{name}"
+                        type="text"
+                        name="name"
+                        id="name"
+                        placeholder="Enter Full Name"
+                        class="form-control"
+                      />
+                      <span
+                        th:if="${#fields.hasErrors('name')}"
+                        th:errors="*{name}"
+                        class="error"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                      <label for="noOfMember">
+                        Number of Members
+                      </label>
+                      <input
+                        th:field="*{noOFMember}"
+                        type="number"
+                        name="noOfMember"
+                        id="noOfMember"
+                        placeholder="Enter Number of Members"
+                        class="form-control"
+                      />
+                      <span
+                        th:if="${#fields.hasErrors('noOFMember')}"
+                        th:errors="*{noOFMember}"
+                        class="error"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-0 col-md-1"></div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-0 col-md-1"></div>
+                  <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                      <label for="fromDistrict">
+                        From District
+                      </label>
+                      <select
+                        th:field="*{formDistrict}"
+                        name="formDistrict"
+                        id="formDistrict"
+                        class="form-control"
+                      >
+                        <option value="-1" selected="selected"
+                          >--SELECT DISTRICT--</option
+                        >
+                        <option
+                          th:each="district : ${districtList}"
+                          th:value="${district.districtCode}"
+                          th:text="${district.districtName}"
+                        ></option>
+                      </select>
+                      <span
+                        th:if="${#fields.hasErrors('formDistrict')}"
+                        th:errors="*{formDistrict}"
+                        class="error"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                      <label for="toDistrict">
+                        To District
+                      </label>
+                      <select
+                        th:field="*{toDistrict}"
+                        name="toDistrict"
+                        id="toDistrict"
+                        class="form-control"
+                      >
+                        <option value="-1" selected="selected"
+                          >--SELECT DISTRICT--</option
+                        >
+                        <option
+                          th:each="district : ${districtList}"
+                          th:value="${district.districtCode}"
+                          th:text="${district.districtName}"
+                        ></option>
+                      </select>
+                      <span
+                        th:if="${#fields.hasErrors('toDistrict')}"
+                        th:errors="*{toDistrict}"
+                        class="error"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-0 col-md-1"></div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-0 col-md-1"></div>
+                  <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                      <label for="purpose">
+                        Purpose of Journey
+                      </label>
+                      <select
+                        th:field="*{purpose}"
+                        name="purpose"
+                        id="purpose"
+                        class="form-control"
+                      >
+                        <option value="-1" selected="selected"
+                          >--Select Purpose--</option
+                        >
+                        <option
+                          th:each="purpose : ${purposeList}"
+                          th:value="${purpose.purposeCode}"
+                          th:text="${purpose.purpose}"
+                        ></option>
+                      </select>
+                      <span
+                        th:if="${#fields.hasErrors('purpose')}"
+                        th:errors="*{purpose}"
+                        class="error"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-md-5">
+                    <div class="form-group">
+                      <label for="justification">
+                        Justification
+                      </label>
+                      <textarea
+                        th:field="*{purposeDetails}"
+                        name="justification"
+                        id="justification"
+                        class="form-control"
+                      ></textarea>
+                      <span
+                        th:if="${#fields.hasErrors('purposeDetails')}"
+                        th:errors="*{purposeDetails}"
+                        class="error"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="col-xs-0 col-md-1"></div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-0 col-md-1"></div>
+                  <div class="col-xs-12 col-md-10 text-center">
+                    <input
+                      type="submit"
+                      name="submit"
+                      value="Submit"
+                      class="btn btn-success"
+                    />
+                  </div>
+                  <div class="col-xs-0 col-md-1"></div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-0 col-md-2"></div>
+      </div>
+    </div>
+    <footer th:replace="fragments/master_fragments :: footer"></footer>
+    <script th:replace="fragments/master_fragments :: common-js"></script>
+    <div id="myModal" class="modal fade">
+      <div th:replace="fragments/master_fragments :: login-modal"></div>
+    </div>
+    <script type="text/javascript">
+      function doValidateMobile() {
+        $(".error-div").hide();
+        $(".form-control").removeClass("error-border");
+        if ($("#otp").val() === "" || isNaN($("#otp").val())) {
+          $("#otp-error").show();
+          $("#otp").addClass("error-border");
+          return false;
+        } else if ($("#otp").val().length != 4) {
+          $("#otp-error").show();
+          $("#otp").addClass("error-border");
+          return false;
+        }
+        return true;
+      }
+    </script>
+    <script>
+      $(window).on("load", function () {
+        if ($("#errorMsg").html() && $("#errorMsg").html() !== "") {
+          $("#myModal").modal("show");
+        }
+      });
+    </script>
+  </body>
+</html>

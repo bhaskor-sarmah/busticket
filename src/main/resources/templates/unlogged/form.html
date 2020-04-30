@@ -1,211 +1,292 @@
 <!DOCTYPE html>
-<html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
->
-  <head>
-    <span th:replace="fragments/master_fragments :: head('e-BusTicket')"></span>
-    <span th:replace="fragments/master_fragments :: common-css"></span>
-    <link th:href="@{/common/css/login.css}" rel="stylesheet" />
-  </head>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-  <body class="nav-sm">
-    <div th:replace="fragments/master_fragments :: top-navbar"></div>
-    <div class="container-fluid" style="margin-bottom: 30px;">
-      <div class="row content">
-        <div class="col-xs-0 col-md-2"></div>
-        <div class="col-xs-12 col-md-8">
-          <div
-            class="alert alert-danger"
-            th:if="${msg != null && msg != ''}"
-            th:text="${msg}"
-          ></div>
-          <div class="panel panel-default" style="margin-top: 25px;">
-            <div class="panel-heading">
-              <label>
-                Welcome ! Please fill the form below for Ticket Booking
-              </label>
-            </div>
-            <div class="panel-body">
-              <form
-                th:action="@{/saveApplicant}"
-                method="POST"
-                th:object="${applicant}"
-              >
-                <div class="row">
-                  <div class="col-xs-0 col-md-1"></div>
-                  <div class="col-xs-12 col-md-5">
-                    <div class="form-group">
-                      <label for="name">
-                        Full Name
-                      </label>
-                      <input
-                        th:field="*{name}"
-                        type="text"
-                        name="name"
-                        id="name"
-                        placeholder="Enter Full Name"
-                        class="form-control"
-                      />
-                      <span
-                        th:if="${#fields.hasErrors('name')}"
-                        th:errors="*{name}"
-                        class="error"
-                      ></span>
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-md-5">
-                    <div class="form-group">
-                      <label for="noOfMember">
-                        Number of Members
-                      </label>
-                      <input
-                        th:field="*{noOFMember}"
-                        type="number"
-                        name="noOfMember"
-                        id="noOfMember"
-                        placeholder="Enter Number of Members"
-                        class="form-control"
-                      />
-                      <span
-                        th:if="${#fields.hasErrors('noOFMember')}"
-                        th:errors="*{noOFMember}"
-                        class="error"
-                      ></span>
-                    </div>
-                  </div>
-                  <div class="col-xs-0 col-md-1"></div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-0 col-md-1"></div>
-                  <div class="col-xs-12 col-md-5">
-                    <div class="form-group">
-                      <label for="fromDistrict">
-                        From District
-                      </label>
-                      <select
-                        th:field="*{formDistrict}"
-                        name="formDistrict"
-                        id="formDistrict"
-                        class="form-control"
-                      >
-                        <option value="-1" selected="selected"
-                          >--SELECT DISTRICT--</option
-                        >
-                        <option
-                          th:each="district : ${districtList}"
-                          th:value="${district.districtCode}"
-                          th:text="${district.districtName}"
-                        ></option>
-                      </select>
-                      <span
-                        th:if="${#fields.hasErrors('formDistrict')}"
-                        th:errors="*{formDistrict}"
-                        class="error"
-                      ></span>
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-md-5">
-                    <div class="form-group">
-                      <label for="toDistrict">
-                        To District
-                      </label>
-                      <select
-                        th:field="*{toDistrict}"
-                        name="toDistrict"
-                        id="toDistrict"
-                        class="form-control"
-                      >
-                        <option value="-1" selected="selected"
-                          >--SELECT DISTRICT--</option
-                        >
-                        <option
-                          th:each="district : ${districtList}"
-                          th:value="${district.districtCode}"
-                          th:text="${district.districtName}"
-                        ></option>
-                      </select>
-                      <span
-                        th:if="${#fields.hasErrors('toDistrict')}"
-                        th:errors="*{toDistrict}"
-                        class="error"
-                      ></span>
-                    </div>
-                  </div>
-                  <div class="col-xs-0 col-md-1"></div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-0 col-md-1"></div>
-                  <div class="col-xs-12 col-md-5">
-                    <div class="form-group">
-                      <label for="purpose">
-                        Purpose of Journey
-                      </label>
-                      <select
-                        th:field="*{purpose}"
-                        name="purpose"
-                        id="purpose"
-                        class="form-control"
-                      >
-                        <option value="-1" selected="selected"
-                          >--Select Purpose--</option
-                        >
-                        <option
-                          th:each="purpose : ${purposeList}"
-                          th:value="${purpose.purposeCode}"
-                          th:text="${purpose.purpose}"
-                        ></option>
-                      </select>
-                      <span
-                        th:if="${#fields.hasErrors('purpose')}"
-                        th:errors="*{purpose}"
-                        class="error"
-                      ></span>
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-md-5">
-                    <div class="form-group">
-                      <label for="justification">
-                        Justification
-                      </label>
-                      <textarea
-                        th:field="*{purposeDetails}"
-                        name="justification"
-                        id="justification"
-                        class="form-control"
-                      ></textarea>
-                      <span
-                        th:if="${#fields.hasErrors('purposeDetails')}"
-                        th:errors="*{purposeDetails}"
-                        class="error"
-                      ></span>
-                    </div>
-                  </div>
-                  <div class="col-xs-0 col-md-1"></div>
-                </div>
-                <div class="row">
-                  <div class="col-xs-0 col-md-1"></div>
-                  <div class="col-xs-12 col-md-10 text-center">
-                    <input
-                      type="submit"
-                      name="submit"
-                      value="Submit"
-                      class="btn btn-success"
-                    />
-                  </div>
-                  <div class="col-xs-0 col-md-1"></div>
-                </div>
-              </form>
-            </div>
+<head>
+  <span th:replace="fragments/master_fragments :: head('e-BusTicket')"></span>
+  <span th:replace="fragments/master_fragments :: common-css"></span>
+  <link th:href="@{/common/css/login.css}" rel="stylesheet" />
+</head>
+
+<body class="nav-sm">
+  <div th:replace="fragments/master_fragments :: top-navbar"></div>
+  <div class="container-fluid" style="margin-bottom: 30px;">
+    <div class="row content">
+      <div class="col-xs-0 col-md-2"></div>
+      <div class="col-xs-12 col-md-8">
+        <div class="alert alert-danger" th:if="${msg != null && msg != ''}" th:text="${msg}"></div>
+        <div class="panel panel-default" style="margin-top: 25px;">
+          <div class="panel-heading">
+            <label style="color: #636363;">
+              Welcome ! Please fill the form below for Ticket Booking
+            </label>
           </div>
+          <div class="panel-body" style="color: #636363;">
+            <form th:action="@{/saveApplicant}" method="POST" th:object="${applicant}">
+              <div class="row">
+                <div class="col-xs-0 col-md-1"></div>
+                <div class="col-xs-12 col-md-5">
+                  <div class="form-group">
+                    <label for="name">
+                      Full Name
+                    </label>
+                    <input th:field="*{name}" type="text" id="name" placeholder="Enter Full Name"
+                      class="form-control" />
+                    <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="error"></span>
+                  </div>
+                </div>
+                                <div class="col-xs-12 col-md-5">
+                                    <div class="form-group">
+                                        <label for="purpose">
+                                            Purpose of Journey
+                                        </label>
+                                        <select th:field="*{purpose}" name="purpose" id="purpose" class="form-control">
+                                            <option value="-1" selected="selected">--Select Purpose--</option>
+                                            <option th:each="purpose : ${purposeList}" th:value="${purpose.purposeCode}"
+                                                    th:text="${purpose.purpose}"></option>
+                                        </select>
+                                        <span th:if="${#fields.hasErrors('purpose')}"
+                                              th:errors="*{purpose}"
+                                              class="error"
+                                              ></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-0 col-md-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-0 col-md-1"></div>
+                                <div class="col-xs-12 col-md-5">
+                                    <div class="form-group">
+                                        <label for="justification">
+                                            Justification
+                                        </label>
+                                        <textarea
+                                            th:field="*{purposeDetails}"
+                                            name="justification"
+                                            id="justification"
+                                            class="form-control"
+                                            ></textarea>
+                                        <span
+                                            th:if="${#fields.hasErrors('purposeDetails')}"
+                                            th:errors="*{purposeDetails}"
+                                            class="error"
+                                            ></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-5">
+                                </div>
+                                <div class="col-xs-0 col-md-1"></div>
+                            </div>
+                            <div class="divider">
+                                <label>PASSENGER DETAILS (USE ADD MORE BUTTON FOR ADDING NEW MEMBER)</label>
+                            </div>
+                            <div id="memberDiv">
+
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-0 col-md-1"></div>
+                                <div class="col-xs-12 col-md-10">
+                                    <button type="button" id="btnAdd" class="btn btn-primary btn-sm">Add More</button>
+                                    <button type="button" id="btnRemove" class="btn btn-danger btn-sm">Remove Last</button>
+                                </div>
+                                <div class="col-xs-0 col-md-1"></div>
+                            </div>
+                            <div class="divider">
+                                <label>JOURNEY FROM DETAILS</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-0 col-md-1"></div>
+                                <div class="col-xs-12 col-md-5">
+                                    <div class="form-group">
+                                        <label for="formState">
+                                            State
+                                        </label>
+                                        <select
+                                            th:field="*{formState}"
+                                            name="formState"
+                                            id="formState"
+                                            class="form-control"
+                                            >
+                                            <option value="-1" selected="selected"
+                                                    >--SELECT--</option
+                                            >
+                                            <option
+                                                th:each="state : ${stateList}"
+                                                th:value="${state.stateCode}"
+                                                th:text="${state.stateName}"
+                                                ></option>
+                                        </select>
+                                        <span
+                                            th:if="${#fields.hasErrors('formState')}"
+                                            th:errors="*{formState}"
+                                            class="error"
+                                            ></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-5">
+                                    <div class="form-group">
+                                        <label for="fromDistrict">
+                                            From District
+                                        </label>
+                                        <select
+                                            th:field="*{formDistrict}"
+                                            name="formDistrict"
+                                            id="formDistrict"
+                                            class="form-control"
+                                            >
+                                            <option value="-1" selected="selected"
+                                                    >--SELECT--</option>
+                                        </select>
+                                        <span
+                                            th:if="${#fields.hasErrors('formDistrict')}"
+                                            th:errors="*{formDistrict}"
+                                            class="error"
+                                            ></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-0 col-md-1"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-0 col-md-1"></div>
+                                <div class="col-xs-12 col-md-5">
+                                    <div class="form-group">
+                                        <label for="fromSubDistrict">
+                                            From Sub District
+                                        </label>
+                                        <select
+                                            th:field="*{formSubDistrict}"
+                                            name="formSubDistrict"
+                                            id="formSubDistrict"
+                                            class="form-control"
+                                            >
+                                            <option value="-1" selected="selected">--SELECT--</option>
+                                        </select>
+                                        <span
+                                            th:if="${#fields.hasErrors('formSubDistrict')}"
+                                            th:errors="*{formSubDistrict}"
+                                            class="error"
+                                            ></span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-md-5">
+                                  <div class="form-group">
+                                    <label for="fromPincode">
+                                      From Pincode
+                                    </label>
+                                    <input th:field="*{fromPincode}" type="text" id="fromPincode" placeholder="Enter Pincode"
+                                      class="form-control" />
+                                    <span th:if="${#fields.hasErrors('fromPincode')}" th:errors="*{fromPincode}" class="error"></span>
+                                  </div>
+                                </div>
+                                <div class="col-xs-0 col-md-1"></div>
+                            </div>
+                            <div class="divider">
+                                <label>DESTINATION TO DETAILS</label>
+                            </div>
+                            <div class="row">
+                              <div class="col-xs-0 col-md-1"></div>
+                              <div class="col-xs-12 col-md-5">
+                                  <div class="form-group">
+                                      <label for="toState">
+                                          State
+                                      </label>
+                                      <select
+                                          th:field="*{toState}"
+                                          name="toState"
+                                          id="toState"
+                                          class="form-control"
+                                          >
+                                          <option value="-1" selected="selected"
+                                                  >--SELECT--</option
+                                          >
+                                          <option
+                                              th:each="state : ${stateList}"
+                                              th:value="${state.stateCode}"
+                                              th:text="${state.stateName}"
+                                              ></option>
+                                      </select>
+                                      <span
+                                          th:if="${#fields.hasErrors('toState')}"
+                                          th:errors="*{toState}"
+                                          class="error"
+                                          ></span>
+                                  </div>
+                              </div>
+                              <div class="col-xs-12 col-md-5">
+                                  <div class="form-group">
+                                      <label for="toDistrict">
+                                          To District
+                                      </label>
+                                      <select
+                                          th:field="*{toDistrict}"
+                                          name="toDistrict"
+                                          id="toDistrict"
+                                          class="form-control"
+                                          >
+                                          <option value="-1" selected="selected"
+                                                  >--SELECT--</option>
+                                      </select>
+                                      <span
+                                          th:if="${#fields.hasErrors('toDistrict')}"
+                                          th:errors="*{toDistrict}"
+                                          class="error"
+                                          ></span>
+                                  </div>
+                              </div>
+                              <div class="col-xs-0 col-md-1"></div>
+                          </div>
+                          <div class="row">
+                              <div class="col-xs-0 col-md-1"></div>
+                              <div class="col-xs-12 col-md-5">
+                                  <div class="form-group">
+                                      <label for="toSubDistrict">
+                                          To Sub District
+                                      </label>
+                                      <select
+                                          th:field="*{toSubDistrict}"
+                                          name="toSubDistrict"
+                                          id="toSubDistrict"
+                                          class="form-control"
+                                          >
+                                          <option value="-1" selected="selected">--SELECT--</option>
+                                      </select>
+                                      <span
+                                          th:if="${#fields.hasErrors('toSubDistrict')}"
+                                          th:errors="*{toSubDistrict}"
+                                          class="error"
+                                          ></span>
+                                  </div>
+                              </div>
+                              <div class="col-xs-12 col-md-5">
+                                <div class="form-group">
+                                  <label for="toPincode">
+                                    To Pincode
+                                  </label>
+                                  <input th:field="*{toPincode}" type="text" id="toPincode" placeholder="Enter Pincode"
+                                    class="form-control" />
+                                  <span th:if="${#fields.hasErrors('toPincode')}" th:errors="*{toPincode}" class="error"></span>
+                                </div>
+                              </div>
+                              <div class="col-xs-0 col-md-1"></div>
+                          </div>
+                            <div class="divider"></div>
+                            <div class="row">
+                                <div class="col-xs-0 col-md-1"></div>
+                                <div class="col-xs-12 col-md-10 text-center">
+                                    <input type="submit" name="submit" value="Submit Form" class="btn btn-success" />
+                                </div>
+                                <div class="col-xs-0 col-md-1"></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-0 col-md-2"></div>
         </div>
-        <div class="col-xs-0 col-md-2"></div>
-      </div>
     </div>
     <footer th:replace="fragments/master_fragments :: footer"></footer>
     <script th:replace="fragments/master_fragments :: common-js"></script>
     <div id="myModal" class="modal fade">
-      <div th:replace="fragments/master_fragments :: login-modal"></div>
+        <div th:replace="fragments/master_fragments :: login-modal"></div>
     </div>
     <script type="text/javascript">
       function doValidateMobile() {
@@ -225,10 +306,102 @@
     </script>
     <script>
       $(window).on("load", function () {
+        var memberCount = 0;
         if ($("#errorMsg").html() && $("#errorMsg").html() !== "") {
           $("#myModal").modal("show");
         }
+        $("#btnAdd").click(function () {
+          memberCount++;
+          var str = "<div class=\"row\"  id=\"member" + memberCount + "\">\n" +
+            "                <div class=\"col-xs-0 col-md-1\"></div>\n" +
+            "                <div class=\"col-xs-12 col-md-4\">\n" +
+            "                  <div class=\"form-group\">\n" +
+            "                    <label for=\"name\">\n" +
+            "                      NAME\n" +
+            "                    </label>\n" +
+            "                    <input type=\"text\" name=\"name\" id=\"name\" placeholder=\"Enter Full Name\" class=\"form-control\" />\n" +
+            "                  </div>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-xs-12 col-md-3\">\n" +
+            "                  <div class=\"form-group\">\n" +
+            "                    <label for=\"name\">\n" +
+            "                      GENDER\n" +
+            "                    </label>\n" +
+            "                    <input type=\"text\" name=\"name\" id=\"name\" placeholder=\"Enter Full Name\" class=\"form-control\" />\n" +
+            "                  </div>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-xs-12 col-md-3\">\n" +
+            "                  <div class=\"form-group\">\n" +
+            "                    <label for=\"name\">\n" +
+            "                      AGE\n" +
+            "                    </label>\n" +
+            "                    <input type=\"text\" name=\"name\" id=\"name\" placeholder=\"Enter Full Name\" class=\"form-control\" />\n" +
+            "                  </div>\n" +
+            "                </div>\n" +
+            "                <div class=\"col-xs-0 col-md-1\"></div>\n" +
+            "              </div>";
+          $("#memberDiv").append(str);
+        });
+        $("#btnRemove").click(function () {
+          if (memberCount <= 1) {
+            alert("Last Member");
+          } else {
+            $("#member" + memberCount).remove();
+            memberCount--;
+          }
+        });
+        $("#btnAdd").click();
+        $("#formState").change(function () {
+          getDistrict("formDistrict", $(this).val());
+        });
+        $("#toState").change(function () {
+          getDistrict("toDistrict", $(this).val());
+        });
+
+        $("#formDistrict").change(function () {
+          getSubDistrict("formSubDistrict", $(this).val());
+        });
+        $("#toDistrict").change(function () {
+          getSubDistrict("toSubDistrict", $(this).val());
+        });
+        function getDistrict(id, val) {
+          $.ajax({
+            type: "POST",
+            url: "./GetDistrict",
+            data: "id=" + val,
+            success: function (data) {
+              var obj = jQuery.parseJSON(data);
+              var html = "";
+              $.each(obj, function (key, value) {
+                html += "<option value='" + value.districtCode + "'>" + value.districtName + "</option>\n";
+              });
+              $("#" + id).html(html);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              alert("Error Fetching District List");
+            }
+          });
+        }
+        function getSubDistrict(id, val) {
+          $.ajax({
+            type: "POST",
+            url: "./GetSubDistrict",
+            data: "id=" + val,
+            success: function (data) {
+              var obj = jQuery.parseJSON(data);
+              var html = "";
+              $.each(obj, function (key, value) {
+                html += "<option value='" + value.subDistrictCode + "'>" + value.subDistrictName + "</option>\n";
+              });
+              $("#" + id).html(html);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+              alert("Error Fetching Sub-District List");
+            }
+          });
+        }
       });
     </script>
-  </body>
+</body>
+
 </html>

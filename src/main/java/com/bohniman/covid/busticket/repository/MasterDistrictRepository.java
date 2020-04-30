@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MasterDistrictRepository extends JpaRepository<MasterDistrict, String> {
 
-    List<MasterDistrict> findAllByOrderByDistrictNameAsc();
+    List<MasterDistrict> findAllByState_stateCodeOrderByDistrictNameAsc(String stateCode);
 }

@@ -12,6 +12,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>busticket</name>
 	<description>Application for Bus Ticket During Lockdown</description>
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>

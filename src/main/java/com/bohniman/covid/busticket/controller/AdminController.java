@@ -29,7 +29,7 @@ public class AdminController {
     @GetMapping(value = { "/page-home" })
     public ModelAndView noRole(ModelAndView mv) {
         mv = new ModelAndView("admin/index");
-        mv.addObject("districtList", commonService.getAllDistrict());
+        mv.addObject("stateList", commonService.getAllState());
         mv.addObject("purposeList", commonService.getAllPurpose());
         mv.addObject("applicant", new Applicant());
         return mv;
@@ -45,7 +45,7 @@ public class AdminController {
 
         if (result.hasErrors()) {
             mv = new ModelAndView("admin/index");
-            mv.addObject("districtList", commonService.getAllDistrict());
+            mv.addObject("stateList", commonService.getAllState());
             mv.addObject("purposeList", commonService.getAllPurpose());
             mv.addObject("applicant", applicant);
             return mv;
@@ -57,7 +57,7 @@ public class AdminController {
                 return mv;
             } else {
                 mv = new ModelAndView("admin/index");
-                mv.addObject("districtList", commonService.getAllDistrict());
+                mv.addObject("stateList", commonService.getAllState());
                 mv.addObject("purposeList", commonService.getAllPurpose());
                 mv.addObject("applicant", applicant);
                 mv.addObject("msg", "Failed saving Application ! Please try again.");
@@ -76,7 +76,7 @@ public class AdminController {
     @PostMapping(value = { "/updateDetails" })
     public ModelAndView updateDetails(ModelAndView mv, @RequestParam("applicantId") Long applicantId) {
         mv = new ModelAndView("admin/update");
-        mv.addObject("districtList", commonService.getAllDistrict());
+        mv.addObject("stateList", commonService.getAllState());
         mv.addObject("purposeList", commonService.getAllPurpose());
         mv.addObject("applicant", applicantService.getApplicantById(applicantId));
         return mv;
@@ -87,7 +87,7 @@ public class AdminController {
             BindingResult result) {
         if (result.hasErrors()) {
             mv = new ModelAndView("admin/update");
-            mv.addObject("districtList", commonService.getAllDistrict());
+            mv.addObject("stateList", commonService.getAllState());
             mv.addObject("purposeList", commonService.getAllPurpose());
             mv.addObject("applicant", applicant);
             return mv;
@@ -100,7 +100,7 @@ public class AdminController {
                 return mv;
             } else {
                 mv = new ModelAndView("admin/update");
-                mv.addObject("districtList", commonService.getAllDistrict());
+                mv.addObject("stateList", commonService.getAllState());
                 mv.addObject("purposeList", commonService.getAllPurpose());
                 mv.addObject("applicant", applicant);
                 mv.addObject("msg", "Failed Updating Applicat ! Please try again.");
